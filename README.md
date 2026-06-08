@@ -24,70 +24,87 @@ across 4 seasons to answer one question: **What does RCB need to finally win?**
 
 ---
 
+---
+
 ## 🗄️ Database Structure — 20 Tables
 
-`Ball_by_Ball` · `Matches` · `Player` · `Team` · `Season` · `Venue` · `Wicket_Taken`  
-`Extra_Runs` · `Player_Match` · `Batting_Style` · `Bowling_Style` · `City` · `Country`  
-`Out_Type` · `Outcome` · `Rolee` · `Toss_Decision` · `Umpire` · `Win_By` · `Extra_Type`
+| Core Tables | Reference Tables |
+|---|---|
+| `Ball_by_Ball` — every delivery bowled | `Batting_Style`, `Bowling_Style` |
+| `Matches` — match results & details | `City`, `Country`, `Venue` |
+| `Player` — profiles & DOB | `Out_Type`, `Outcome`, `Rolee` |
+| `Wicket_Taken` — every dismissal | `Toss_Decision`, `Win_By` |
+| `Extra_Runs` — wides, no-balls | `Extra_Type`, `Umpire` |
+| `Player_Match`, `Team`, `Season` | |
 
 ---
 
-## 📊 Key Queries Covered
+## 📊 Queries Covered
 
-### Objective (Q1–Q15)
-- Data type inspection using `information_schema`
-- RCB season-wise run totals including extras
-- Player age analysis using `TIMESTAMPDIFF`
-- Top 10 batsmen by strike rate (min. 200 balls)
-- Average runs & wickets per player across all seasons
-- All-rounder identification using CTEs
-- Venue win/loss record stored in a created table (`rcb_record`)
-- Bowling style impact on wickets
-- Year-on-year team performance using `LAG()` window function
-- 5 Advanced KPIs: Powerplay RR, Death RR, Economy, Dot Ball %, Boundary %
-- Bowler ranking by venue using `DENSE_RANK()`
-- Consistent performers across all 4 seasons
+### ✅ Objective Queries (Q1–Q15)
 
-### Subjective (Q1–Q10)
-- Toss decision impact on match results (overall + venue-wise)
-- Best player recommendations with a composite score formula
-- Versatile all-rounders (bat + ball) identified via CTEs
+| # | Query | Key Result |
+|---|---|---|
+| Q1 | Column data types via `information_schema` | All 11 cols = INT |
+| Q2 | RCB total runs in Season 1 (incl. extras) | **2,601 runs** |
+| Q3 | Players aged >25 in 2014 | **92 players** |
+| Q4 | RCB wins in 2013 | **9 wins — 56.25%** |
+| Q5 | Top 10 batsmen by strike rate | **ABD leads: 164.27** |
+| Q6 | Average runs per batsman | **Simmons: 42.82/match** |
+| Q7 | Average wickets per bowler | **Bravo: 1.65/match** |
+| Q8 | All-rounders above average (bat + bowl) | CTE-based filter |
+| Q9 | RCB venue win/loss table (created table) | `rcb_record` table |
+| Q10 | Bowling style impact on wickets | Fast Medium dominates |
+| Q11 | YoY team performance using `LAG()` | Better / Worse / Same |
+| Q12 | 5 Advanced KPIs | Powerplay RR, Death RR, Economy, Dot Ball %, Boundary % |
+| Q13 | Bowler ranking by venue using `DENSE_RANK()` | Top performers per ground |
+| Q14 | Consistent performers across 4 seasons | Kohli, Warner, ABD |
+| Q15 | Venue-specific player performance | Player-ground fit analysis |
+
+### 💬 Subjective Queries (Q1–Q10)
+
+- Toss decision impact (overall + venue-specific)
+- Best fit players using a composite score formula
+- All-rounder identification via dual CTEs
 - Man of the Match influence on team morale
-- RCB season performance breakdown with reasons for not winning
+- RCB season-by-season breakdown with trophy failure analysis
 - High-scoring match factors and viewership impact
-- Home ground advantage analysis (Chinnaswamy vs Away)
-- Mega auction strategy — 6 data-backed recommendations
+- Home ground advantage at Chinnaswamy
+- Mega auction strategy — **6 data-backed recommendations**
 
 ---
 
 ## 💡 Key Findings
 
-- **AB de Villiers** leads strike rate at **164.27** — most destructive batsman across 4 seasons
-- **Virat Kohli** averages **39.87 runs/match** across 62 matches — most consistent RCB batsman
-- **Teams choosing to field after winning the toss** have a higher win percentage
-- **RCB's home win rate at Chinnaswamy** is significantly higher than their away record
-- **Fast Medium bowlers** dominate wicket counts across all seasons
+| Insight | Finding |
+|---|---|
+| 🏏 Best Batsman (SR) | AB de Villiers — **164.27** |
+| 📊 Most Consistent | Virat Kohli — **39.87 avg over 62 matches** |
+| 🎯 Best Economy | Top bowlers under **6.5 runs/over** |
+| 🏟️ Home Advantage | RCB wins significantly more at Chinnaswamy |
+| 🪙 Toss Impact | **Fielding first = higher win %** across most venues |
+| 🎳 Best Bowling Style | Fast Medium bowlers lead in total wickets |
 
 ---
 
 ## 🏆 Auction Recommendations for RCB
 
-1. Prioritize a reliable **opening partner** for Kohli
-2. Invest in a **death-over specialist bowler** (Economy < 8 in overs 16–20)
-3. Sign **1–2 genuine all-rounders** who bat at SR > 140 and bowl at Economy < 7.5
-4. Target players with **strong Chinnaswamy records** for home advantage
-5. Avoid over-spending on bowlers with **high economy rates in powerplay**
-6. Build a **spin-heavy bowling lineup** based on economy and dot ball data
+1. **Retain Kohli + ABD** — the core batting spine is non-negotiable
+2. Sign a **reliable opening partner** for Kohli (avg > 35, SR > 130)
+3. Invest in a **death-over specialist** — economy < 8 in overs 16–20
+4. Add **1–2 genuine all-rounders** — SR > 140 batting, economy < 7.5 bowling
+5. Target players with **proven Chinnaswamy performance** for home edge
+6. Build a **spin-heavy attack** based on dot ball % and economy data
 
 ---
 
-## 📁 Project Files
+## 📂 Project Files
 
 | File | Description |
 |---|---|
-| `ipl_analysis.sql` | All 25 SQL queries — objective + subjective |
-| `IPL_Analysis_Presentation.pptx` | Slide deck with visualizations and findings |
-| `IPL_Analysis_Report.docx` | Detailed written answers with insights |
+| `ipl_analysis.sql` | All 25 SQL queries — objective + subjective with comments |
+| `IPL_Analysis_Presentation.pptx` | Slide deck with charts and insights |
+| `IPL_Analysis_Report.docx` | Detailed written answers with analysis |
 
 ---
 
@@ -95,5 +112,5 @@ across 4 seasons to answer one question: **What does RCB need to finally win?**
 
 **Tushar Naha** 
 
-Data Analytics Enthusiast  
+Data Analytics Enthusiast
 
